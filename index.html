@@ -1,20 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Simple Chatbot with ChatGPT</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guided Meditation Demo</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="container">
+        <h1>Guided Meditation Demo</h1>
+        <form id="meditationForm">
+            <label for="mood">Mood:</label>
+            <input type="text" id="mood" name="mood" placeholder="Relaxed, Energetic, etc."><br><br>
 
-<H1>Guided Meditation ChatBot</H1>
-    <p></p>
-    <div class="chat-container">
-        <div id="chatbox">
-            <p class="botText"><span>Loading chatbot...</span></p>
-        </div>
-        <input id="textInput" type="text" name="msg" placeholder="Describe the guided meditation experience you want">
-        <button id="buttonInput">Send</button>
+            <label for="music">Music:</label>
+            <input type="text" id="music" name="music" placeholder="Nature sounds, Piano, etc."><br><br>
+
+            <label for="goal">Goal:</label>
+            <input type="text" id="goal" name="goal" placeholder="Stress relief, Sleep, etc."><br><br>
+
+            <label for="duration">Duration (in minutes):</label>
+            <input type="number" id="duration" name="duration"><br><br>
+
+            <input type="button" value="Create Session" onclick="createMeditationSession()">
+        </form>
+        <div id="chatbotResponse"></div>
     </div>
     <script src="script.js"></script>
 </body>
 </html>
+
