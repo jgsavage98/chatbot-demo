@@ -1,32 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guided Meditation Demo</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background-color: #e0ebeb;
+            border-radius: 10px;
+            padding: 20px;
+            margin: auto;
+            width: 50%;
+        }
+        input, select, button {
+            margin: 10px 0;
+            padding: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Guided Meditation Demo</h1>
         <form id="meditationForm">
-            <label for="mood">Mood:</label>
-            <input type="text" id="mood" name="mood" placeholder="Relaxed, Energetic, etc."><br><br>
-
-            <label for="music">Music:</label>
-            <input type="text" id="music" name="music" placeholder="Nature sounds, Piano, etc."><br><br>
-
-            <label for="goal">Goal:</label>
-            <input type="text" id="goal" name="goal" placeholder="Stress relief, Sleep, etc."><br><br>
-
-            <label for="duration">Duration (in minutes):</label>
-            <input type="number" id="duration" name="duration"><br><br>
-
-            <input type="button" value="Create Session" onclick="createMeditationSession()">
+            <input type="text" id="mood" placeholder="Enter mood (e.g., relaxed, focused)" required><br>
+            <input type="text" id="music" placeholder="Type of music (e.g., nature, ambient)" required><br>
+            <input type="text" id="goal" placeholder="Goal of session (e.g., stress relief)" required><br>
+            <input type="number" id="duration" placeholder="Duration in minutes" required><br>
+            <button type="button" onclick="createSession()">Create Session</button>
         </form>
-        <div id="chatbotResponse"></div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        function createSession() {
+            var mood = document.getElementById('mood').value;
+            var music = document.getElementById('music').value;
+            var goal = document.getElementById('goal').value;
+            var duration = document.getElementById('duration').value;
+
+            // Placeholder for backend integration
+            alert('Session with Mood: ' + mood + ', Music: ' + music + ', Goal: ' + goal + ', Duration: ' + duration + ' minutes will be created.');
+            // Here you will need to call your backend service to create and stream the guided meditation
+        }
+    </script>
 </body>
 </html>
-
