@@ -1,10 +1,10 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const inputField = document.getElementById("textInput");
-    document.getElementById("buttonInput").addEventListener("click", function() {
-        let userText = inputField.value;
-        document.getElementById("chatbox").innerHTML += '<p class="userText"><span>' + userText + '</span></p>';
-        inputField.value = "";
-        // This is where you would add the logic to send the message to ChatGPT and get a response
-    });
-});
+function createMeditationSession() {
+    var mood = document.getElementById('mood').value;
+    var music = document.getElementById('music').value;
+    var goal = document.getElementById('goal').value;
+    var duration = document.getElementById('duration').value;
 
+    var responseText = "Creating a meditation session with your preferences: \nMood: " + mood + "\nMusic: " + music + "\nGoal: " + goal + "\nDuration: " + duration + " minutes.";
+    
+    document.getElementById('chatbotResponse').innerText = responseText;
+}
