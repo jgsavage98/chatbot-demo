@@ -1,32 +1,20 @@
-from flask import Blueprint, request, jsonify, render_template
-import openai  # Assuming you're using the OpenAI Python client
-
-main = Blueprint('main', __name__)
-
-@main.route('/')
-def index():
-    return render_template('index.html')
-
-@main.route('/create_meditation', methods=['POST'])
-def create_meditation():
-    # Extract meditation preferences from the request
-    data = request.json
-    mood = data.get('mood')
-    music = data.get('music')
-    goal = data.get('goal')
-    duration = data.get('duration')
-
-    # Generate meditation script using OpenAI (simplified example)
-    try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"Create a guided meditation script. Mood: {mood}, Music: {music}, Goal: {goal}, Duration: {duration} minutes.",
-            max_tokens=150
-        )
-        script = response.choices[0].text.strip()
-
-        # TODO: Integrate with a text-to-speech service like Descript
-
-        return jsonify({"script": script})
-    except Exception as e:
-        return jsonify({"error": str(e)})
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guided Meditation Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Guided Meditation Demo</h1>
+        <input type="text" id="mood" placeholder="Enter mood (e.g., relaxed, focused)">
+        <input type="text" id="music" placeholder="Type of music (e.g., nature, ambient)">
+        <input type="text" id="goal" placeholder="Goal of session (e.g., stress relief)">
+        <input type="number" id="duration" placeholder="Duration in minutes">
+        <button onclick="createSession()">Create Session</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
