@@ -1,7 +1,11 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 import openai  # Assuming you're using the OpenAI Python client
 
 main = Blueprint('main', __name__)
+
+@main.route('/')
+def index():
+    return render_template('index.html')
 
 @main.route('/create_meditation', methods=['POST'])
 def create_meditation():
