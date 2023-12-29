@@ -5,7 +5,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    return 'Welcome to the Guided Meditation Demo'
 
 @main.route('/create_meditation', methods=['POST'])
 def create_meditation():
