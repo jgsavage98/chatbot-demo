@@ -5,7 +5,7 @@ main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return 'Welcome to the Guided Meditation Demo'
+    return render_template('index.html')
 
 @main.route('/create_meditation', methods=['POST'])
 def create_meditation():
@@ -30,3 +30,4 @@ def create_meditation():
         return jsonify({"script": script})
     except Exception as e:
         return jsonify({"error": str(e)})
+
