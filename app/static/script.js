@@ -4,7 +4,6 @@ function createSession() {
     var goal = document.getElementById('goal').value;
     var duration = document.getElementById('duration').value;
 
-    // Example fetch call - Replace with your actual API call
     fetch('/create_meditation', {
         method: 'POST',
         headers: {
@@ -25,4 +24,4 @@ function createSession() {
         document.getElementById('errorOutput').textContent = 'An error occurred: ' + error.message;
     });
 }
- 
+
