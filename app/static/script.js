@@ -25,4 +25,4 @@ function createSession() {
         document.getElementById('errorOutput').textContent = 'An error occurred: ' + error.message;
     });
 }
-
+ 
