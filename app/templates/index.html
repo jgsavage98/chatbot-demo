@@ -2,21 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Guided Meditation Session</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Guided Meditation Demo</h1>
-
-    <input type="text" id="mood" placeholder="Enter mood (e.g., relaxed, focused)">
-    <input type="text" id="music" placeholder="Type of music (e.g., nature, ambient)">
-    <input type="text" id="goal" placeholder="Goal of session (e.g., stress relief)">
-    <input type="number" id="duration" placeholder="Duration in minutes">
-
-    <button onclick="createSession()">Create Session</button>
-
-    <div id="scriptOutput">Meditation script will appear here</div>
-    <div id="errorOutput"></div>
-
+    <div class="container">
+        <h1>Guided Meditation Demo</h1>
+        <input type="text" id="mood" placeholder="Enter mood (e.g., relaxed, focused)">
+        <input type="text" id="music" placeholder="Type of music (e.g., nature, ambient)">
+        <input type="text" id="goal" placeholder="Goal of session (e.g., stress relief)">
+        <input type="number" id="duration" placeholder="Duration in minutes">
+        <button onclick="createSession()">Create Session</button>
+        <div id="scriptOutput">Meditation script will appear here</div>
+        <div id="errorOutput"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
+
