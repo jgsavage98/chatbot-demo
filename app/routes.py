@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify, render_template, Response
+import requests
 import openai  # Assuming you're using the OpenAI Python client
 import azure.cognitiveservices.speech as speechsdk
+import xml.etree.ElementTree as ET
 import os
 
 main = Blueprint('main', __name__)
@@ -28,25 +30,28 @@ def create_meditation():
         script = response.choices[0].text.strip()
 
         # Convert the script to speech using Azure Text-to-Speech
-        azure_key = os.getenv('AZURE_TTS_KEY')  # Azure TTS Key
-        azure_region = os.getenv('AZURE_TTS_REGION')  # Azure TTS Region
+        # Azure endpoint and key
+        azure_endpoint = "https://eastus.tts.speech.microsoft.com/cognitiveservices/v1"
+        azure_key = os.getenv('AZURE_TTS_KEY')  # Store your key in an environment variable
 
-        speech_config = speechsdk.SpeechConfig(subscription=azure_key, region=azure_region)
-        synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
+        headers = {
+            'Ocp-Apim-Subscription-Key': azure_key,
+            'Content-Type': 'application/ssml+xml',
+            'X-Microsoft-OutputFormat': 'audio-16khz-128kbitrate-mono-mp3'
+        }
 
-        result = synthesizer.speak_text_async(script).get()
+        # Construct the SSML
+        ssml = f"<speak version='1.0' xml:lang='en-US'> <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice> </speak>"
 
-        if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
-            # Stream the audio data
-            return Response(result.audio_data, mimetype='audio/wav')
+        try:
+            response = requests.post(azure_endpoint, headers=headers, data=ssml)
+
+        if response.status_code == 200:
+            # Stream the audio data directly in the response
+            return Response(response.content, mimetype='audio/mpeg')
         else:
-            return jsonify({"error": "Error synthesizing the script"}), 500
-
+            return jsonify({"error": "Error from Azure TTS service"}), response.status_code
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-        
-#        return jsonify({"script": script})
-#    except Exception as e:
-#        return jsonify({"error": str(e)})
 
