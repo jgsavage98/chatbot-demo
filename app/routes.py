@@ -52,6 +52,11 @@ def create_meditation():
         else:
             return jsonify({"error": "Error from Azure TTS service"}), response.status_code
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    except requests.exceptions.RequestException as e:
+    app.logger.error(f"Azure TTS Request failed: {e.response.text}")
+    return jsonify({"error": f"Azure TTS Request failed: {e.response.text}"}), e.response.status_code
+
+
+    #except Exception as e:
+    #    return jsonify({"error": str(e)}), 500
 
