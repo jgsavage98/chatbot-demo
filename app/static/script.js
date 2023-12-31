@@ -3,7 +3,13 @@ function createSession() {
     var music = document.getElementById('music').value;
     var goal = document.getElementById('goal').value;
     var duration = document.getElementById('duration').value;
+    var createSessionButton = document.getElementById('createSessionButton');
+    var progressBar = document.getElementById('progressBar');
 
+    // Disable the button and show the progress bar
+    createSessionButton.disabled = true;
+    progressBar.style.display = 'block';
+    
     fetch('/create_meditation', {
         method: 'POST',
         headers: {
@@ -22,6 +28,11 @@ function createSession() {
     })
     .catch(error => {
         document.getElementById('errorOutput').textContent = 'An error occurred: ' + error.message;
+    })
+    .finally(() => {
+        // Re-enable the button and hide the progress bar
+        createSessionButton.disabled = false;
+        progressBar.style.display = 'none';
     });
 }
 
