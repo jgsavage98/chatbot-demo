@@ -44,5 +44,12 @@ def create_meditation():
         return Response(audio_data, mimetype='audio/wav')
 
     except Exception as e:
+        # Log the error for debugging
+        print(f"An error occurred: {str(e)}")
+        # Return a more detailed error message to the client
         return jsonify({"error": str(e)}), 500
+
+    
+    #except Exception as e:
+    #    return jsonify({"error": str(e)}), 500
 
