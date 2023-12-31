@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify, render_template, Response
 import openai  # Assuming you're using the OpenAI Python client
 import azure.cognitiveservices.speech as speechsdk
 import os
+import io
 
 main = Blueprint('main', __name__)
 
