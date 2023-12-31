@@ -5,9 +5,11 @@ function createSession() {
     var duration = document.getElementById('duration').value;
     var createSessionButton = document.getElementById('createSessionButton');
     var progressBar = document.getElementById('progressBar');
+    var audioContainer = document.getElementById('audioContainer'); // Add an element to hold the audio player
 
-    // Clear the scriptOutput
-    scriptOutput.textContent = '';
+    // Clear the previous audio and hide scriptOutput
+    audioContainer.innerHTML = '';
+    document.getElementById('scriptOutput').style.display = 'none';
 
     // Disable the button and show the progress bar
     createSessionButton.disabled = true;
@@ -24,10 +26,15 @@ function createSession() {
         if (!response.ok) {
             throw new Error('Network response was not ok: ' + response.statusText);
         }
-        return response.json();
+        return response.blob();
     })
-    .then(data => {
-        document.getElementById('scriptOutput').textContent = data.script;
+    .then(blob => {
+        var url = window.URL.createObjectURL(blob);
+        var audio = document.createElement('audio');
+        audio.src = url;
+        audio.controls = true;
+        audioContainer.appendChild(audio);
+        audio.play();
     })
     .catch(error => {
         document.getElementById('errorOutput').textContent = 'An error occurred: ' + error.message;
