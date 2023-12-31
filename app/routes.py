@@ -41,7 +41,7 @@ def create_meditation():
         }
 
         # Construct the SSML
-        ssml = f"<speak version='1.0' xml:lang='en-US'> <voice xml:lang='en-US' xml:gender='Female' style='whispering' name='en-US-JennyNeural'>{script}</voice> </speak>"
+        ssml = f"<speak version='1.0' xml:lang='en-US'> <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural' style='whispering' >{script}</voice> </speak>"
 
         
         response = requests.post(azure_endpoint, headers=headers, data=ssml)
