@@ -32,15 +32,20 @@ def create_meditation():
         azure_region = os.getenv('AZURE_TTS_REGION')  # Azure TTS Region from environment variable
         speech_config = speechsdk.SpeechConfig(subscription=azure_key, region=azure_region)
 
-        # Convert the script to speech using Azure Text-to-Speech SDK
-        audio_config = speechsdk.audio.AudioOutputConfig(filename="path/to/temp/audiofile.wav")
+        # Use an in-memory stream
+        stream = speechsdk.audio.AudioOutputStream.create_pull_stream()
+        audio_config = speechsdk.audio.AudioConfig(stream=stream)
         synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+
+
+        # Synthesize the speech
         ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
         synthesizer.speak_ssml_async(ssml_string).get()
 
-        # Read the audio file and send as response
-        with open("path/to/temp/audiofile.wav", "rb") as audio_file:
-            audio_data = audio_file.read()
+        # Get the synthesized audio data
+        stream.seek(0)
+        audio_data = stream.read()
+
         return Response(audio_data, mimetype='audio/wav')
 
     
