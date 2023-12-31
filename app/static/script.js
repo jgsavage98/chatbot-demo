@@ -6,6 +6,9 @@ function createSession() {
     var createSessionButton = document.getElementById('createSessionButton');
     var progressBar = document.getElementById('progressBar');
 
+    // Clear the scriptOutput
+    scriptOutput.textContent = '';
+
     // Disable the button and show the progress bar
     createSessionButton.disabled = true;
     progressBar.style.display = 'block';
