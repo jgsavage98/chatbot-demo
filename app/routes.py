@@ -31,7 +31,8 @@ def create_meditation():
 
         # Convert the script to speech using Azure Text-to-Speech
         # Azure endpoint and key
-        azure_endpoint = "https://eastus.tts.speech.microsoft.com/cognitiveservices/v1"
+        #azure_endpoint = "https://eastus.tts.speech.microsoft.com/cognitiveservices/v1"
+        azure_endpoint = "https://eastus.customvoice.api.speech.microsoft.com"
         azure_key = os.getenv('AZURE_TTS_KEY')  # Store your key in an environment variable
 
         headers = {
