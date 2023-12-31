@@ -9,7 +9,7 @@ function createSession() {
 
     // Clear the previous audio and hide scriptOutput
     audioContainer.innerHTML = '';
-    document.getElementById('scriptOutput').style.display = 'none';
+    #document.getElementById('scriptOutput').style.display = 'none';
 
     // Disable the button and show the progress bar
     createSessionButton.disabled = true;
