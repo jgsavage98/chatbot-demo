@@ -60,5 +60,6 @@ def create_meditation():
 
     
     except Exception as e:
-        return jsonify({"error": debug}), 500
+        app.logger.error(f"An error occurred: {str(debug)}")
+        return jsonify({"error": str(debug)}), 500
 
