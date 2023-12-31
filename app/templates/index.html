@@ -14,6 +14,14 @@
         <input type="text" id="goal" placeholder="Goal of session (e.g., stress relief)">
         <input type="number" id="duration" placeholder="Duration in minutes">
         <button onclick="createSession()">Create Session</button>
+        <button id="createSessionButton" onclick="createSession()">Create Session</button>
+        
+        <!-- Progress Bar -->
+        <div id="progressBar" style="display:none;">
+            <p>Loading...</p>
+            <progress></progress>
+        </div>
+
         <div id="scriptOutput">Meditation script will appear here</div>
         <div id="errorOutput"></div>
     </div>
