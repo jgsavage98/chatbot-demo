@@ -43,8 +43,8 @@ def create_meditation():
         # Construct the SSML
         ssml = f"<speak version='1.0' xml:lang='en-US'> <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice> </speak>"
 
-        try:
-            response = requests.post(azure_endpoint, headers=headers, data=ssml)
+        
+        response = requests.post(azure_endpoint, headers=headers, data=ssml)
 
         if response.status_code == 200:
             # Stream the audio data directly in the response
