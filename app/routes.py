@@ -39,8 +39,28 @@ def create_meditation():
         azure_region = os.getenv('AZURE_TTS_REGION')
         speech_config = speechsdk.SpeechConfig(subscription=azure_key, region=azure_region)
 
-        # Use an in-memory stream
-        stream = MemoryStream()
+
+        class CustomStreamCallback(speechsdk.audio.PullAudioOutputStreamCallback):
+            def __init__(self):
+                super().__init__()
+                self._stream = io.BytesIO()
+
+            def write(self, data):
+                self._stream.write(data)
+
+            def close(self):
+                pass
+
+            def get_audio_data(self):
+                return self._stream.getvalue()
+
+        # Create the custom callback
+        callback = CustomStreamCallback()
+
+        # Use the custom callback with PullAudioOutputStream
+        stream = speechsdk.audio.PullAudioOutputStream(callback)
+
+
         audio_config = speechsdk.audio.AudioConfig(stream=stream)
         synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
@@ -54,7 +74,7 @@ def create_meditation():
             return jsonify({"error": "Speech synthesis failed"}), 500
 
         # Get the synthesized audio data
-        audio_data = stream.getvalue()
+        audio_data = callback.get_audio_data()
 
         return Response(audio_data, mimetype='audio/wav')
 
