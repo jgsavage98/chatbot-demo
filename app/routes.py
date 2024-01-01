@@ -49,8 +49,12 @@ def create_meditation():
         logger.debug(debug)
         
         # Use an in-memory stream
-        stream = speechsdk.audio.AudioOutputStream.create_pull_stream()
+        # Use an in-memory stream
+        stream = speechsdk.audio.PullAudioOutputStream()
         audio_config = speechsdk.audio.AudioConfig(stream=stream)
+
+        #stream = speechsdk.audio.AudioOutputStream.create_pull_stream()
+        #audio_config = speechsdk.audio.AudioConfig(stream=stream)
         synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
         debug = 'line 56'
@@ -75,8 +79,9 @@ def create_meditation():
 
         return Response(audio_data, mimetype='audio/wav')
 
-    
     except Exception as e:
-        app.logger.error(f"An error occurred: {str(debug)}")
-        return jsonify({"error": str(debug)}), 500
+        return jsonify({"error": str(e)}), 500
+    #except Exception as e:
+    #    app.logger.error(f"An error occurred: {str(debug)}")
+    #    return jsonify({"error": str(debug)}), 500
 
