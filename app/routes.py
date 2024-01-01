@@ -30,7 +30,10 @@ def create_meditation():
             max_tokens=1000
         )
         script = response.choices[0].text.strip()
-
+        logger.info('********* Start of Script ********\n')
+        logger.info(script)
+        logger.info('********* End of Script ********\n')
+        
         # Set up Azure Speech SDK
         azure_key = os.getenv('AZURE_TTS_KEY')
         azure_region = os.getenv('AZURE_TTS_REGION')
@@ -41,28 +44,11 @@ def create_meditation():
         logger.debug(debug)
         
         # Synthesize the speech
-        stream = speechsdk.audio.PullAudioOutputStream()
-        audio_config = speechsdk.audio.AudioConfig(stream=stream)
-        synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)        
-        ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
-        #synthesizer.speak_ssml_async(ssml_string).get()
-
-        result = synthesizer.speak_ssml_async(ssml_string).get()
-
-        if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
-                    debug = "Speech synthesized for text [{}]".format(text))
-                    logger.info(debug)
-                    logger.debug(debug)
-                    audio_stream = speechsdk.AudioDataStream(result)
-        elif result.reason == speechsdk.ResultReason.Canceled:
-            cancellation_details = result.cancellation_details
-            debug = "Speech synthesis canceled: {}".format(cancellation_details.reason))
-            logger.info(debug)
-            logger.debug(debug)
-            if cancellation_details.reason == speechsdk.CancellationReason.Error:
-                debug = "Error details: {}".format(cancellation_details.error_details))
-                logger.info(debug)
-                logger.debug(debug)
+        #stream = speechsdk.audio.PullAudioOutputStream()
+        #audio_config = speechsdk.audio.AudioConfig(stream=stream)
+        #synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)        
+        #ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
+        ##synthesizer.speak_ssml_async(ssml_string).get()
         
         debug = '********* Synthesized the speech'
         logger.info(debug)
@@ -70,7 +56,7 @@ def create_meditation():
         
         # Convert stream to AudioDataStream and read the data
         #audio_stream = speechsdk.audio.AudioDataStream(stream)
-        #audio_stream = speechsdk.AudioDataStream(result)
+        audio_stream = speechsdk.AudioDataStream(result)
         debug = '********* Created the Audio stream'
         
         audio_data = audio_stream.read_all()
