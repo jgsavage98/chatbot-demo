@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, Response
 import openai  # Assuming you're using the OpenAI Python client
 import azure.cognitiveservices.speech as speechsdk
+from azure.cognitiveservices.speech.audio import MemoryStream
 import os
 import io
 import logging
@@ -39,7 +40,7 @@ def create_meditation():
         speech_config = speechsdk.SpeechConfig(subscription=azure_key, region=azure_region)
 
         # Use an in-memory stream
-        stream = speechsdk.audio.PullAudioOutputStream()
+        stream = MemoryStream()
         audio_config = speechsdk.audio.AudioConfig(stream=stream)
         synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
 
@@ -52,8 +53,8 @@ def create_meditation():
             logger.error("Speech synthesis failed.")
             return jsonify({"error": "Speech synthesis failed"}), 500
 
-        # Read the audio data from the stream
-        audio_data = stream.read_all()
+        # Get the synthesized audio data
+        audio_data = stream.getvalue()
 
         return Response(audio_data, mimetype='audio/wav')
 
