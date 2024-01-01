@@ -52,8 +52,8 @@ def create_meditation():
             logger.error("Speech synthesis failed.")
             return jsonify({"error": "Speech synthesis failed"}), 500
 
-        # Get the synthesized audio data
-        audio_data = stream.get().read()
+        # Read the audio data from the stream
+        audio_data = stream.read_all()
 
         return Response(audio_data, mimetype='audio/wav')
 
