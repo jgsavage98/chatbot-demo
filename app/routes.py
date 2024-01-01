@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, render_template, Response
+from flask import Blueprint, request, jsonify, render_template, Response, current_app
 import openai
 import azure.cognitiveservices.speech as speechsdk
 import os
@@ -50,7 +50,8 @@ def create_meditation():
 
         return Response(audio_data, mimetype='audio/mpeg')
 
+
     except Exception as e:
-        logger.error(f"An error occurred: {str(e)}")
+        current_app.logger.error(f"An error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
