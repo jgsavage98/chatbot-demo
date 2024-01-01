@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, Response
 import openai  # Assuming you're using the OpenAI Python client
 import azure.cognitiveservices.speech as speechsdk
-from azure.cognitiveservices.speech.audio import MemoryStream
+#from azure.cognitiveservices.speech.audio import MemoryStream
 import os
 import io
 import logging
