@@ -53,7 +53,7 @@ def create_meditation():
         
         # Convert stream to AudioDataStream and read the data
         #audio_stream = speechsdk.audio.AudioDataStream(stream)
-        audio_stream = speechsdk.audio.AudioOutputStream(stream)
+        audio_stream = speechsdk.AudioDataStream(stream)
         audio_data = audio_stream.read_all()
 
         debug = '********* Converted stream to AudioDataStream and read the data'
