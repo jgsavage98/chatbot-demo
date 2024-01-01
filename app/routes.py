@@ -45,18 +45,28 @@ def create_meditation():
         audio_config = speechsdk.audio.AudioConfig(stream=stream)
         synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)        
         ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
-        synthesizer.speak_ssml_async(ssml_string).get()
+        #synthesizer.speak_ssml_async(ssml_string).get()
 
+
+
+        result = synthesizer.speak_ssml_async(ssml_string).get()
+
+        debug = result.errorDetails
+        logger.info(debug)
+        logger.debug(debug)
+        
         debug = '********* Synthesized the speech'
         logger.info(debug)
         logger.debug(debug)
         
         # Convert stream to AudioDataStream and read the data
         #audio_stream = speechsdk.audio.AudioDataStream(stream)
-        audio_stream = speechsdk.AudioDataStream(stream)
+        audio_stream = speechsdk.AudioDataStream(result)
+        debug = '********* Created the Audio stream'
+        
         audio_data = audio_stream.read_all()
 
-        debug = '********* Converted stream to AudioDataStream and read the data'
+        debug = '********* Read the data'
         logger.info(debug)
         logger.debug(debug)
         
