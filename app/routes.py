@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify, render_template, Response, current_app
 import openai
 import azure.cognitiveservices.speech as speechsdk
-from azure.cognitiveservices.speech import AudioDataStream
 import os
 import logging
 
@@ -52,7 +51,7 @@ def create_meditation():
         logger.info('********* Synthesized the speech')
         
         # Convert stream to AudioDataStream and read the data
-        audio_stream = speechsdk.audio.AudioDataStream(stream)
+        audio_stream = speechsdk.AudioDataStream(stream)
         debug = '********* Created the Audio stream'
         
         audio_data = audio_stream.read_all()
