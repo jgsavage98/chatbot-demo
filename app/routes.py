@@ -60,9 +60,9 @@ def create_meditation():
         return jsonify({"error": str(e)}), 500
 
 def chunk_script(script, chunk_length=5000):
-    """
-    Divide the script into smaller parts. Each part should be small enough for Azure TTS to handle.
-    """
+    
+    #Divide the script into smaller parts. Each part should be small enough for Azure TTS to handle.
+    
     chunks = []
     while script:
         chunk = script[:chunk_length]
