@@ -27,9 +27,13 @@ def create_meditation():
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=f"Create a guided meditation script. Mood: {mood}, Music: {music}, Goal: {goal}, Duration: {duration} minutes.",
-            max_tokens=2000
+            max_tokens=1000
         )
         script = response.choices[0].text.strip()
+        logger.info('********* Start of Script ********\n')
+        logger.info(script)
+        logger.info('********* End of Script ********\n')
+
         
         # Chunk the script
         chunks = chunk_script(script)
@@ -47,6 +51,10 @@ def create_meditation():
         combined_audio = bytearray()
         for chunk in chunks:
             ssml = f"<speak version='1.0' xml:lang='en-US'> <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{chunk}</voice> </speak>"
+            logger.info('********* Start of SSML Chunk ********\n')
+            logger.info(ssml)
+            logger.info('********* End of SSML Chunk ********\n')
+
             response = requests.post(azure_endpoint, headers=headers, data=ssml)
             if response.status_code == 200:
                 combined_audio.extend(response.content)
