@@ -41,10 +41,8 @@ def create_meditation():
 
         logger.info('********* Set up Azure Speech SDK')
 
-        # Synthesize the speech
-        # No arguments needed for AudioConfig when synthesizing to a byte stream
-        audio_config = speechsdk.audio.AudioConfig()
-        synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)
+        # Synthesize the speech without specifying an AudioConfig
+        synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
         ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
         result = synthesizer.speak_ssml_async(ssml_string).get()
 
