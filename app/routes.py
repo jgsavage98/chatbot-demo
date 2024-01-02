@@ -42,21 +42,20 @@ def create_meditation():
         logger.info('********* Set up Azure Speech SDK')
         
         # Synthesize the speech
-        stream = speechsdk.audio.PullAudioOutputStream()
-        audio_config = speechsdk.audio.AudioConfig(stream=stream)
+        audio_config = speechsdk.audio.AudioConfig(use_default_microphone=False)
         synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)        
         ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
-        synthesizer.speak_ssml_async(ssml_string).get()
+        result = synthesizer.speak_ssml_async(ssml_string).get()
         
-        logger.info('********* Synthesized the speech')
-        
-        # Convert stream to AudioDataStream and read the data
-        audio_stream = speechsdk.AudioDataStream(stream)
-        debug = '********* Created the Audio stream'
-        
-        audio_data = audio_stream.read_all()
+        if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
+            logger.info("Speech synthesized for text.")
+            audio_data = result.audio_data
+        elif result.reason == speechsdk.ResultReason.Canceled:
+            cancellation = result.cancellation_details
+            logger.error(f"Speech synthesis canceled: {cancellation.reason}. Error details: {cancellation.error_details}")
+            raise Exception(f"Speech synthesis canceled: {cancellation.reason}")
 
-        logger.info('********* Read the data')
+        logger.info('********* Synthesized the speech')
         
         return Response(audio_data, mimetype='audio/mpeg')
 
@@ -64,4 +63,5 @@ def create_meditation():
     except Exception as e:
         current_app.logger.error(f"An error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
 
