@@ -4,6 +4,11 @@ import openai  # Assuming you're using the OpenAI Python client
 import azure.cognitiveservices.speech as speechsdk
 import xml.etree.ElementTree as ET
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 main = Blueprint('main', __name__)
 
@@ -28,6 +33,9 @@ def create_meditation():
             max_tokens=1000
         )
         script = response.choices[0].text.strip()
+        logger.info('********* Start of Script ********\n')
+        logger.info(script)
+        logger.info('********* End of Script ********\n')
 
         # Convert the script to speech using Azure Text-to-Speech
         # Azure endpoint and key
@@ -43,6 +51,9 @@ def create_meditation():
         # Construct the SSML
         ssml = f"<speak version='1.0' xml:lang='en-US'> <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural' style='whispering' >{script}</voice> </speak>"
 
+        logger.info('********* Start of ssml ********\n')
+        logger.info(ssml)
+        logger.info('********* End of ssml ********\n')
         
         response = requests.post(azure_endpoint, headers=headers, data=ssml)
 
