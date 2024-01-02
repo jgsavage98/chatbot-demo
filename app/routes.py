@@ -67,7 +67,7 @@ def create_meditation():
         logger.error(f"An error occurred: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
-def chunk_script(script, chunk_length=5000):
+def chunk_script(script, chunk_length=1000):
     
     #Divide the script into smaller parts. Each part should be small enough for Azure TTS to handle.
     
