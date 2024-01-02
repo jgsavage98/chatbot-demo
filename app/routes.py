@@ -27,7 +27,7 @@ def create_meditation():
         response = openai.Completion.create(
             engine="text-davinci-003",
             prompt=f"Create a guided meditation script. Mood: {mood}, Music: {music}, Goal: {goal}, Duration: {duration} minutes.",
-            max_tokens=1000
+            max_tokens=5000
         )
         script = response.choices[0].text.strip()
         
