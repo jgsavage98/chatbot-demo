@@ -70,7 +70,7 @@ def chunk_script(script, chunk_length=5000):
         chunks.append(chunk)
     return chunks
 
-if __name__ == '__main__':
+#if __name__ == '__main__':
     # Run the app
 
 
