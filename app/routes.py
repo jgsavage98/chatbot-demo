@@ -39,9 +39,7 @@ def create_meditation():
         azure_region = os.getenv('AZURE_TTS_REGION')
         speech_config = speechsdk.SpeechConfig(subscription=azure_key, region=azure_region)
 
-        debug = '********* Set up Azure Speech SDK'
-        logger.info(debug)
-        logger.debug(debug)
+        logger.info('********* Set up Azure Speech SDK')
         
         # Synthesize the speech
         #stream = speechsdk.audio.PullAudioOutputStream()
@@ -50,9 +48,7 @@ def create_meditation():
         #ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
         ##synthesizer.speak_ssml_async(ssml_string).get()
         
-        debug = '********* Synthesized the speech'
-        logger.info(debug)
-        logger.debug(debug)
+        logger.info('********* Synthesized the speech')
         
         # Convert stream to AudioDataStream and read the data
         #audio_stream = speechsdk.audio.AudioDataStream(stream)
@@ -61,9 +57,7 @@ def create_meditation():
         
         audio_data = audio_stream.read_all()
 
-        debug = '********* Read the data'
-        logger.info(debug)
-        logger.debug(debug)
+        logger.info('********* Read the data')
         
         return Response(audio_data, mimetype='audio/mpeg')
 
