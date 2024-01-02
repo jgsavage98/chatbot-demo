@@ -42,17 +42,16 @@ def create_meditation():
         logger.info('********* Set up Azure Speech SDK')
         
         # Synthesize the speech
-        #stream = speechsdk.audio.PullAudioOutputStream()
-        #audio_config = speechsdk.audio.AudioConfig(stream=stream)
-        #synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)        
-        #ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
-        ##synthesizer.speak_ssml_async(ssml_string).get()
+        stream = speechsdk.audio.PullAudioOutputStream()
+        audio_config = speechsdk.audio.AudioConfig(stream=stream)
+        synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)        
+        ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
+        synthesizer.speak_ssml_async(ssml_string).get()
         
         logger.info('********* Synthesized the speech')
         
         # Convert stream to AudioDataStream and read the data
-        #audio_stream = speechsdk.audio.AudioDataStream(stream)
-        audio_stream = speechsdk.AudioDataStream(result)
+        audio_stream = speechsdk.audio.AudioDataStream(stream)
         debug = '********* Created the Audio stream'
         
         audio_data = audio_stream.read_all()
