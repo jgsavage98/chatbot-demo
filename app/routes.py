@@ -40,9 +40,9 @@ def create_meditation():
         speech_config = speechsdk.SpeechConfig(subscription=azure_key, region=azure_region)
 
         logger.info('********* Set up Azure Speech SDK')
-        
+
         # Synthesize the speech
-        audio_config = speechsdk.audio.AudioConfig(use_default_microphone=False)
+        audio_config = speechsdk.audio.AudioConfig()
         synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config, audio_config=audio_config)        
         ssml_string = f"<speak version='1.0' xml:lang='en-US'><voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{script}</voice></speak>"
         result = synthesizer.speak_ssml_async(ssml_string).get()
