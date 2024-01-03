@@ -21,7 +21,7 @@ def create_meditation():
     music = data.get('music')
     goal = data.get('goal')
     #convert to number of words
-    wordcount = data.get('duration') * 100 
+    wordcount = int(data.get('duration')) * 100 
 
     logger.info('********* Word Count:' wordcount)
 
