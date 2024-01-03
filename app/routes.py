@@ -20,13 +20,14 @@ def create_meditation():
     mood = data.get('mood')
     music = data.get('music')
     goal = data.get('goal')
-    duration = data.get('duration')
+    #convert to number of words
+    wordcount = data.get('duration') * 100 
 
     try:
         # Generate meditation script using OpenAI
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=f"Create a guided meditation script. Mood: {mood}, Music: {music}, Goal: {goal}, Duration: {duration} minutes.",
+            prompt=f"Create a guided meditation script. Mood: {mood}, Music: {music}, Goal: {goal}, Word Count at least : {duration} words.",
             max_tokens=1000
         )
         script = response.choices[0].text.strip()
