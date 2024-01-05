@@ -18,15 +18,15 @@ def index():
 def create_meditation():
     data = request.json
     mood = data.get('mood')
-    music = data.get('music')
+    # music = data.get('music')
     goal = data.get('goal')
-    duration = data.get('duration')
+    # duration = data.get('duration')
 
     try:
         # Generate meditation script using OpenAI
         response = openai.Completion.create(
             engine="text-davinci-003",
-            prompt=f"Create a guided meditation script. Mood: {mood}, Music: {music}, Goal: {goal}, and use at least {duration} words.",
+            prompt=f"Create a guided meditation script. Mood: {mood}, Goal: {goal}.",
             max_tokens=1000
         )
         script = response.choices[0].text.strip()
@@ -49,19 +49,23 @@ def create_meditation():
 
         # Process each chunk
         combined_audio = bytearray()
+        print("Number of chunks: ", len(chunks))
+        counter = 1
         for chunk in chunks:
+            print("Chunk Number ", counter)
             ssml = f"<speak version='1.0' xml:lang='en-US'> <voice xml:lang='en-US' xml:gender='Female' name='en-US-JennyNeural'>{chunk}</voice> </speak>"
             logger.info('********* Start of SSML Chunk ********\n')
             logger.info(ssml)
             logger.info('********* End of SSML Chunk ********\n')
 
-            response = requests.post(azure_endpoint, headers=headers, data=ssml)
+            response = requests.post(azure_endpoint, headers=headers, data=ssml.encode('utf-8'))
             if response.status_code == 200:
                 combined_audio.extend(response.content)
             else:
                 raise Exception(f"Error from Azure TTS service: {response.status_code}")
+            counter+=1
 
-        return Response(combined_audio, mimetype='audio/mpeg')
+        return Response(bytes(combined_audio), mimetype='audio/mpeg')
 
     except Exception as e:
         logger.error(f"An error occurred: {str(e)}")
