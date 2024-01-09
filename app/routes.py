@@ -137,15 +137,20 @@ def create_meditation():
         process = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         combined_audio, _ = process.communicate()
 
-        # Export 'combined_audio' to a byte stream
-        combined_audio_byte_stream = BytesIO()
-        combined_audio.export(combined_audio_byte_stream, format="mp3")
+        # # Export 'combined_audio' to a byte stream
+        # combined_audio_byte_stream = BytesIO()
+        # combined_audio.export(combined_audio_byte_stream, format="mp3")
 
-        # Reset buffer position to the start of the stream
-        combined_audio_byte_stream.seek(0)
+        # # Reset buffer position to the start of the stream
+        # combined_audio_byte_stream.seek(0)
+
+
+        # combined_audio is already a byte string, suitable for returning in the response
+        return Response(combined_audio, mimetype='audio/mpeg')
+
 
         # Read the byte stream and return it in the response
-        return Response(combined_audio_byte_stream.read(), mimetype='audio/mpeg')
+        #return Response(combined_audio_byte_stream.read(), mimetype='audio/mpeg')
 
 
     except Exception as e:
