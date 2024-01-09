@@ -4,6 +4,8 @@ import requests
 import openai
 import os
 import logging
+import tempfile
+import subprocess
 from io import BytesIO
 from azure.storage.blob import BlobServiceClient
 
@@ -52,6 +54,7 @@ def create_meditation():
             max_tokens=1000
         )
         script = response.choices[0].text.strip()
+
         logger.info('********* Start of Script ********\n')
         logger.info(script)
         logger.info('********* End of Script ********\n')
@@ -69,9 +72,9 @@ def create_meditation():
 
         # Set up the API call to ElevenLabs for TTS
         data = {
-        "text": script,
-        "model_id": "eleven_monolingual_v1",
-        "voice_settings": {
+            "text": script,
+            "model_id": "eleven_monolingual_v1",
+            "voice_settings": {
             "stability": 0.43,
             "similarity_boost": 0.28,
             "style": 0.23,
@@ -81,51 +84,57 @@ def create_meditation():
 
         # Fetch and store the main audio in memory
         response = requests.post(url, json=data, headers=headers)
-        main_audio_buffer = BytesIO()
+        
 
-        for chunk in response.iter_content(chunk_size=CHUNK_SIZE):
-            if chunk:
-                main_audio_buffer.write(chunk)
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as main_audio_temp:
+            main_audio_temp.write(response.content)
+            main_audio_path = main_audio_temp.name
 
-        # Reset buffer position to the start
-        main_audio_buffer.seek(0)
-
-        # Load the main audio for processing
-        sound1 = AudioSegment.from_file(main_audio_buffer, format="mp3")
-        sound1.export(f"sound1.mp3", format='mp3')
-
-        # Now get the background music from the Azure Storage Account
         # Azure setup for background audio
-        connect_str = 'DefaultEndpointsProtocol=https;AccountName=backgroundaudio;AccountKey=JghVljN/kQzr8z+HgSLlpGP8On2JZF94Yaxxh1maDMoTtjBEyIz3Q0q9lZEi8nQ4D6LMHZg5Icru+AStoo2Zdg==;EndpointSuffix=core.windows.net'  # Replace with your Azure connection string
-        container_name = 'backgroundaudiofiles'  # Replace with your container name
-        blob_name = 'RelaxBackgroundAudio.mp3'  # Blob name for the background audio
+        connect_str = 'DefaultEndpointsProtocol=https;AccountName=backgroundaudio;AccountKey=JghVljN/kQzr8z+HgSLlpGP8On2JZF94Yaxxh1maDMoTtjBEyIz3Q0q9lZEi8nQ4D6LMHZg5Icru+AStoo2Zdg==;EndpointSuffix=core.windows.net' # Replace with your Azure connection string
+        container_name = 'backgroundaudiofiles' # Replace with your container name
+        blob_name = 'RelaxBackgroundAudio.mp3' # Blob name for the background audio
 
         blob_service_client = BlobServiceClient.from_connection_string(connect_str)
         blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
 
         # Fetch and store the background audio in memory
-        background_audio_buffer = BytesIO()
+        # background_audio_buffer = BytesIO()
         background_audio_stream = blob_client.download_blob()
 
-        background_audio_stream.readinto(background_audio_buffer)
-        background_audio_buffer.seek(0)  # Reset buffer position to the start
+        # Fetch the background audio and store it in a temporary file
+        background_audio_stream = blob_client.download_blob()
+        with tempfile.NamedTemporaryFile(delete=False, suffix='.mp3') as background_audio_temp:
+            background_audio_temp.write(background_audio_stream.readall())
+            background_audio_path = background_audio_temp.name
 
-        # Load the background audio for processing
-        background = AudioSegment.from_file(background_audio_buffer, format="mp3")
-        background = background - 20  # Reduces volume by 20 dB
 
-        # Overlay background on sound1
-        combined = sound1.overlay(background)
-        
-        # Export 'combined' to a byte stream
-        combined_byte_stream = BytesIO()
-        combined.export(combined_byte_stream, format="mp3")
+        # Path to the local ffmpeg binary
+        ffmpeg_path = './ffmpeg-6.1-amd64-static/ffmpeg' # Adjust this path to where ffmpeg is located in your project
+
+        # Prepare the ffmpeg command for mixing audio
+        ffmpeg_command = [
+            ffmpeg_path,
+            "-i", main_audio_path, # Main audio input file
+            "-i", background_audio_path, # Background audio input file
+            "-filter_complex", 
+            "[1:a]volume=0.2[a1];[0:a][a1]amix=inputs=2:duration=first",    # Reduce volume and mix
+            "-f", "mp3", "-" # Output to stdout in mp3 format
+        ]
+
+        # Run the ffmpeg command and capture the output
+        process = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        combined_audio, _ = process.communicate()
+
+        # Export 'combined_audio' to a byte stream
+        combined_audio_byte_stream = BytesIO()
+        combined_audio.export(combined_audio_byte_stream, format="mp3")
 
         # Reset buffer position to the start of the stream
-        combined_byte_stream.seek(0)
+        combined_audio_byte_stream.seek(0)
 
         # Read the byte stream and return it in the response
-        return Response(combined_byte_stream.read(), mimetype='audio/mpeg')
+        return Response(combined_audio_byte_stream.read(), mimetype='audio/mpeg')
 
 
     except Exception as e:
