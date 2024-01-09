@@ -121,7 +121,7 @@ def create_meditation():
 
 
         # Path to the local ffmpeg binary
-        ffmpeg_path = './ffmpeg' # Adjust this path to where ffmpeg is located in your project
+        ffmpeg_path = './app/ffmpeg' # Adjust this path to where ffmpeg is located in your project
 
         # Prepare the ffmpeg command for mixing audio
         ffmpeg_command = [
