@@ -109,6 +109,17 @@ def create_meditation():
             background_audio_path = background_audio_temp.name
 
 
+        current_directory = os.getcwd()
+        logger.info('********* Current Directory ********\n')
+        logger.info(current_directory)
+        logger.info('************************************\n')
+
+        list_directory = os.listdir()
+        logger.info('********* List Directory ********\n')
+        logger.info(list_directory)
+        logger.info('************************************\n')
+
+
         # Path to the local ffmpeg binary
         ffmpeg_path = './ffmpeg' # Adjust this path to where ffmpeg is located in your project
 
