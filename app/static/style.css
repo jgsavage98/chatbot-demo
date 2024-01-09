@@ -13,6 +13,7 @@ body {
     padding: 20px;
     margin: auto;
     max-width: 500px;
+    text-align: left;
 }
 
 input[type="text"], input[type="number"], button {

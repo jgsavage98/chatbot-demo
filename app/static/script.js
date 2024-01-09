@@ -1,8 +1,13 @@
 function createSession() {
-    var mood = document.getElementById('mood').value;
+    // var mood = document.getElementById('mood').value;
     // var music = document.getElementById('music').value;
-    var goal = document.getElementById('goal').value;
     // var duration = document.getElementById('duration').value;
+    var name = document.getElementById('name').value;
+    var gender = document.getElementById('gender').value;
+    var struggles = document.getElementById('struggles').value;
+    var emotions = document.getElementById('emotions').value;
+    var goal = document.getElementById('goal').value;
+    var other_info = document.getElementById('other_info').value;
     var createSessionButton = document.getElementById('createSessionButton');
     var progressBar = document.getElementById('progressBar');
     var audioContainer = document.getElementById('audioContainer'); // Add an element to hold the audio player
@@ -20,7 +25,7 @@ function createSession() {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ mood, goal}),
+        body: JSON.stringify({ name, gender, struggles, emotions, goal, other_info}),
     })
     .then(response => {
         if (!response.ok) {
