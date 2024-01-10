@@ -60,7 +60,7 @@ def create_meditation():
         logger.info('********* End of Script ********\n')
 
         # This is the path to Fiona's voice on ElevenLabs
-        url = "https://api.elevenlabs.io/v1/text-to-speech/7L2F0M8ojXkZ6StuH3Zr/stream?optimize_streaming_latency=4"
+        url = "https://api.elevenlabs.io/v1/text-to-speech/7L2F0M8ojXkZ6StuH3Zr/stream?optimize_streaming_latency=3"
 
         # This is the header to access Fiona's voice on ElevenLabs
         headers = {
@@ -75,10 +75,10 @@ def create_meditation():
             "text": script,
             "model_id": "eleven_monolingual_v1",
             "voice_settings": {
-            "stability": 0.43,
-            "similarity_boost": 0.28,
-            "style": 0.23,
-            "use_speaker_boost": 0
+            "stability": 0.55,
+            "similarity_boost": 0.58,
+            "style": 0.0,
+            "use_speaker_boost": 1
             }
         }
 
